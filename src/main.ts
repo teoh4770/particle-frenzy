@@ -193,6 +193,7 @@ if (c) {
   let particles: Particle[] = [];
   let score: number;
 
+  // Reset State whenever we start the game
   function init() {
     player = new Player(x, y, 10, "white");
     projectiles = [];
@@ -345,7 +346,7 @@ if (c) {
     projectiles.push(new Projectile(x, y, 5, "white", velocity));
   });
 
-  startGameBtn.addEventListener("click", (e: MouseEvent) => {
+  startGameBtn.addEventListener("click", () => {
     init();
     animate();
     spawnEnemies();
