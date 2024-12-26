@@ -12,7 +12,7 @@ const startGameBtn = document.getElementById(
   "startGameBtn",
 ) as HTMLButtonElement;
 const modelEl = document.getElementById("modelEl") as HTMLElement;
-console.log(modelEl);
+const bigScoreEl = document.getElementById("bigScoreEl") as HTMLElement;
 
 class Player {
   x: number;
@@ -313,9 +313,12 @@ if (c) {
       // Collision detection between enemy and player
       const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
 
+      // Enemy hits player
       if (dist - player.radius - enemy.radius < 1) {
         // stop animation
         cancelAnimationFrame(animationId);
+        modelEl.style.display = "flex";
+        bigScoreEl.textContent = String(score);
       }
     });
   }

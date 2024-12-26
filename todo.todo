@@ -11,7 +11,7 @@ Basic Game Checklist:
 - [X] Create particle explosion on hit
 - [X] Add score
 - [X] Add start game button
-- [ ] Add game over UI
+- [X] Add game over UI
 - [ ] Add restart button
 - [ ] Add background music
 - [ ] Add sound effects
