@@ -24,7 +24,11 @@ if (c) {
   /***********************/
   /*** Event Listeners ***/
   /***********************/
-  handleWindowClick(player, projectiles, c);
+  handleWindowClick(player, (velocity) => {
+    projectiles.push(
+      new Projectile(player.x, player.y, 5, "white", velocity, c),
+    );
+  });
 
   startGameBtn.addEventListener("click", () => {
     init();

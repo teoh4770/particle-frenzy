@@ -1,9 +1,8 @@
-import { Player, Projectile } from "./classes";
+import { Player } from "./classes";
 
 export function handleWindowClick(
   player: Player,
-  projectiles: Projectile[],
-  context: CanvasRenderingContext2D,
+  clickHandler: (velocity: { x: number; y: number }) => void,
 ) {
   window.addEventListener("click", (e: MouseEvent) => {
     const angle = Math.atan2(e.clientY - player.y, e.clientX - player.x);
@@ -13,8 +12,6 @@ export function handleWindowClick(
       y: Math.sin(angle) * speedFactor,
     };
 
-    projectiles.push(
-      new Projectile(player.x, player.y, 5, "white", velocity, context),
-    );
+    clickHandler(velocity);
   });
 }
