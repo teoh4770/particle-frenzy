@@ -12,7 +12,7 @@ Basic Game Checklist:
 - [X] Add score
 - [X] Add start game button
 - [X] Add game over UI
-- [ ] Add restart button
+- [X] Add restart button
 - [ ] Add background music
 - [ ] Add sound effects
 - [ ] Resize event

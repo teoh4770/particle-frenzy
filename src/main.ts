@@ -187,10 +187,21 @@ if (c) {
   const x = canvas.width / 2;
   const y = canvas.height / 2;
 
-  const player = new Player(x, y, 10, "white");
-  const projectiles: Projectile[] = [];
-  const enemies: Enemy[] = [];
-  const particles: Particle[] = [];
+  let player = new Player(x, y, 10, "white");
+  let projectiles: Projectile[] = [];
+  let enemies: Enemy[] = [];
+  let particles: Particle[] = [];
+  let score: number;
+
+  function init() {
+    player = new Player(x, y, 10, "white");
+    projectiles = [];
+    enemies = [];
+    particles = [];
+    score = 0;
+    scoreEl.textContent = String(0);
+    bigScoreEl.textContent = String(0);
+  }
 
   // Enemies should move towards the player
   function spawnEnemies() {
@@ -227,7 +238,6 @@ if (c) {
   // Animation loop: Allow us to call a callback continously
   // e.g. We can continously call 'animate' function itself
   let animationId: number;
-  let score: number = 0;
   function animate() {
     animationId = requestAnimationFrame(animate);
 
@@ -319,6 +329,7 @@ if (c) {
         cancelAnimationFrame(animationId);
         modelEl.style.display = "flex";
         bigScoreEl.textContent = String(score);
+        startGameBtn.textContent = "Restart";
       }
     });
   }
@@ -335,6 +346,7 @@ if (c) {
   });
 
   startGameBtn.addEventListener("click", (e: MouseEvent) => {
+    init();
     animate();
     spawnEnemies();
     modelEl.style.display = "none";
