@@ -1,0 +1,18 @@
+Basic Game Checklist:
+- [X] Create a player (Player)
+- [X] Shoot projectiles (Projectile)
+- [X] Create enemies (Enemy)
+- [X] Detect collision on enemy / projectile hit (Animation loop)
+- [X] Detect collision on enemy / player hit
+(cancelAnimationFrame)
+- [X] Remove off screen projectiles (we still calculating for the off screen projectiles, and to improve performance, we need to remove them)
+- [X] Colorize game
+- [X] Shrink enemies on hit
+- [X] Create particle explosion on hit
+- [ ] Add score
+- [ ] Add game over UI
+- [ ] Add restart button
+- [ ] Add start game button
+- [ ] Add background music
+- [ ] Add sound effects
+- [ ] Resize event
