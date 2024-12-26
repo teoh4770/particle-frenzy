@@ -1,201 +1,44 @@
 import gsap from "gsap";
 import "./style.css";
+import { Enemy, Particle, Player, Projectile } from "./classes";
+import { handleWindowClick } from "./eventListeners";
+import { scoreEl, bigScoreEl, modelEl, startGameBtn } from "./elements";
 
 const canvas = document.querySelector("canvas") as HTMLCanvasElement;
-const c = canvas.getContext("2d") as CanvasRenderingContext2D;
-
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
-const scoreEl = document.getElementById("score") as HTMLElement;
-const startGameBtn = document.getElementById(
-  "startGameBtn",
-) as HTMLButtonElement;
-const modelEl = document.getElementById("modelEl") as HTMLElement;
-const bigScoreEl = document.getElementById("bigScoreEl") as HTMLElement;
-
-class Player {
-  x: number;
-  y: number;
-  radius: number;
-  color: string;
-
-  constructor(x: number, y: number, radius: number, color: string) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-  }
-
-  draw() {
-    // specify that we wanna start drawing on the screen with beginPath
-    // create an arc based on the given properties
-    // specify the color with fill
-    c.beginPath();
-    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
-    c.fill();
-  }
-}
-
-// Projectile is a circle that shoot from the player position to where the mouse at
-class Projectile {
-  x: number;
-  y: number;
-  radius: number;
-  color: string;
-  velocity: {
-    x: number;
-    y: number;
-  };
-
-  constructor(
-    x: number,
-    y: number,
-    radius: number,
-    color: string,
-    velocity: {
-      x: number;
-      y: number;
-    },
-  ) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-    this.velocity = velocity;
-  }
-
-  draw() {
-    // specify that we wanna start drawing on the screen with beginPath
-    // create an arc/circle based on the given properties
-    // specify the color
-    c.beginPath();
-    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
-    c.fill();
-  }
-
-  update() {
-    this.draw();
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
-  }
-}
-
-class Enemy {
-  x: number;
-  y: number;
-  radius: number;
-  color: string;
-  velocity: {
-    x: number;
-    y: number;
-  };
-
-  constructor(
-    x: number,
-    y: number,
-    radius: number,
-    color: string,
-    velocity: {
-      x: number;
-      y: number;
-    },
-  ) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-    this.velocity = velocity;
-  }
-
-  draw() {
-    // specify that we wanna start drawing on the screen with beginPath
-    // create an arc/circle based on the given properties
-    // specify the color
-    c.beginPath();
-    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
-    c.fill();
-  }
-
-  update() {
-    this.draw();
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
-  }
-}
-
-const friction = 0.99;
-class Particle {
-  x: number;
-  y: number;
-  radius: number;
-  color: string;
-  velocity: {
-    x: number;
-    y: number;
-  };
-  alpha: number;
-
-  constructor(
-    x: number,
-    y: number,
-    radius: number,
-    color: string,
-    velocity: {
-      x: number;
-      y: number;
-    },
-  ) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-    this.velocity = velocity;
-    this.alpha = 1;
-  }
-
-  draw() {
-    // c.save() allows us to apply global properties to the block contained within itself.
-    c.save();
-    c.globalAlpha = this.alpha; // Note: negative alpha will turn into positive
-    // specify that we wanna start drawing on the screen with beginPath
-    // create an arc/circle based on the given properties
-    // specify the color
-    c.beginPath();
-    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
-    c.fill();
-    c.restore();
-  }
-
-  update() {
-    this.draw();
-    this.velocity.x *= friction;
-    this.velocity.y *= friction;
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
-    this.alpha -= 0.01;
-  }
-}
+const c = canvas.getContext("2d") as CanvasRenderingContext2D;
 
 if (c) {
   let frame = 0;
 
   const x = canvas.width / 2;
   const y = canvas.height / 2;
-
-  let player = new Player(x, y, 10, "white");
+  let player = new Player(x, y, 10, "white", c);
   let projectiles: Projectile[] = [];
   let enemies: Enemy[] = [];
   let particles: Particle[] = [];
   let score: number;
 
+  /***********************/
+  /*** Event Listeners ***/
+  /***********************/
+  handleWindowClick(player, projectiles, c);
+
+  startGameBtn.addEventListener("click", () => {
+    init();
+    animate();
+    spawnEnemies();
+    modelEl.style.display = "none";
+  });
+
+  /***********************/
+  /*** Game Functions  ***/
+  /***********************/
   // Reset State whenever we start the game
   function init() {
-    player = new Player(x, y, 10, "white");
+    player = new Player(x, y, 10, "white", c);
     projectiles = [];
     enemies = [];
     particles = [];
@@ -204,7 +47,6 @@ if (c) {
     bigScoreEl.textContent = String(0);
   }
 
-  // Enemies should move towards the player
   function spawnEnemies() {
     requestAnimationFrame(spawnEnemies);
     frame++;
@@ -232,8 +74,18 @@ if (c) {
         y: Math.sin(angle),
       };
 
-      enemies.push(new Enemy(x, y, radius, color, velocity));
+      enemies.push(new Enemy(x, y, radius, color, velocity, c));
     }
+  }
+
+  function gameOver() {
+    // Stop animation
+    cancelAnimationFrame(animationId);
+
+    // Show and update the game over model
+    modelEl.style.display = "flex";
+    bigScoreEl.textContent = String(score);
+    startGameBtn.textContent = "Restart";
   }
 
   // Animation loop: Allow us to call a callback continously
@@ -291,6 +143,7 @@ if (c) {
                   x: (Math.random() - 0.5) * (Math.random() * 4),
                   y: (Math.random() - 0.5) * (Math.random() * 4),
                 },
+                c,
               ),
             );
           }
@@ -326,30 +179,8 @@ if (c) {
 
       // Enemy hits player
       if (dist - player.radius - enemy.radius < 1) {
-        // stop animation
-        cancelAnimationFrame(animationId);
-        modelEl.style.display = "flex";
-        bigScoreEl.textContent = String(score);
-        startGameBtn.textContent = "Restart";
+        gameOver();
       }
     });
   }
-
-  window.addEventListener("click", (e: MouseEvent) => {
-    const angle = Math.atan2(e.clientY - player.y, e.clientX - player.x);
-    const speedFactor = 5;
-    const velocity = {
-      x: Math.cos(angle) * speedFactor,
-      y: Math.sin(angle) * speedFactor,
-    };
-
-    projectiles.push(new Projectile(x, y, 5, "white", velocity));
-  });
-
-  startGameBtn.addEventListener("click", () => {
-    init();
-    animate();
-    spawnEnemies();
-    modelEl.style.display = "none";
-  });
 }
