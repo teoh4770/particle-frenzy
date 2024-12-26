@@ -7,6 +7,8 @@ const c = canvas.getContext("2d") as CanvasRenderingContext2D;
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
+const scoreEl = document.getElementById("score") as HTMLElement;
+
 class Player {
   x: number;
   y: number;
@@ -220,6 +222,7 @@ if (c) {
   // Animation loop: Allow us to call a callback continously
   // e.g. We can continously call 'animate' function itself
   let animationId: number;
+  let score: number = 0;
   function animate() {
     animationId = requestAnimationFrame(animate);
 
@@ -277,6 +280,10 @@ if (c) {
           }
 
           if (enemy.radius - 10 > 5) {
+            // Increase score
+            score += 100;
+            scoreEl.textContent = String(score);
+
             // Shrink enemy on hit
             // Transition to enemy radius - 10
             gsap.to(enemy, {
@@ -286,6 +293,9 @@ if (c) {
               projectiles.splice(projectileId, 1);
             }, 0);
           } else {
+            // Remove from scene altogether
+            score += 250;
+            scoreEl.textContent = String(score);
             // Till the very next frame to start remove the detected objects from the arrays, to avoid flickering
             setTimeout(() => {
               enemies.splice(enemyId, 1);
