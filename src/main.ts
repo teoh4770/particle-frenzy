@@ -8,6 +8,11 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 const scoreEl = document.getElementById("score") as HTMLElement;
+const startGameBtn = document.getElementById(
+  "startGameBtn",
+) as HTMLButtonElement;
+const modelEl = document.getElementById("modelEl") as HTMLElement;
+console.log(modelEl);
 
 class Player {
   x: number;
@@ -326,6 +331,9 @@ if (c) {
     projectiles.push(new Projectile(x, y, 5, "white", velocity));
   });
 
-  animate();
-  spawnEnemies();
+  startGameBtn.addEventListener("click", (e: MouseEvent) => {
+    animate();
+    spawnEnemies();
+    modelEl.style.display = "none";
+  });
 }

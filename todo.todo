@@ -9,10 +9,10 @@ Basic Game Checklist:
 - [X] Colorize game
 - [X] Shrink enemies on hit
 - [X] Create particle explosion on hit
-- [ ] Add score
+- [X] Add score
+- [X] Add start game button
 - [ ] Add game over UI
 - [ ] Add restart button
-- [ ] Add start game button
 - [ ] Add background music
 - [ ] Add sound effects
 - [ ] Resize event
