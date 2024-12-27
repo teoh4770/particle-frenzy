@@ -103,16 +103,25 @@ if (c) {
     c.fillStyle = "rgba(0, 0, 0, 0.1)";
     c.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Render all objects on the screen, such as player, particles, projectiles, enemies
     player.draw();
-    particles.forEach((particle, id) => {
+    for (let particleId = particles.length - 1; particleId >= 0; particleId--) {
+      const particle = particles[particleId];
+
       // Remove particle from screen
       if (particle.alpha <= 0) {
-        particles.splice(id, 1);
+        particles.splice(particleId, 1);
       } else {
         particle.update();
       }
-    });
-    projectiles.forEach((projectile, id) => {
+    }
+    for (
+      let projectileId = projectiles.length - 1;
+      projectileId >= 0;
+      projectileId--
+    ) {
+      const projectile = projectiles[projectileId];
+      
       projectile.update();
 
       // Remove from edges of screen
@@ -121,16 +130,21 @@ if (c) {
       const yTopBound = projectile.y + projectile.radius <= 0;
       const yBottomBound = projectile.y - projectile.radius >= canvas.height;
       if (xLeftBound || xRightBound || yTopBound || yBottomBound) {
-        setTimeout(() => {
-          projectiles.splice(id, 1);
-        }, 0);
+        projectiles.splice(projectileId, 1);
       }
-    });
-    enemies.forEach((enemy, enemyId) => {
+    }
+    for (let enemyId = enemies.length - 1; enemyId >= 0; enemyId--) {
+      const enemy = enemies[enemyId];
       enemy.update();
 
       // Collision detection between enemy and projectile
-      projectiles.forEach((projectile, projectileId) => {
+      for (
+        let projectileId = projectiles.length - 1;
+        projectileId >= 0;
+        projectileId--
+      ) {
+        const projectile = projectiles[projectileId];
+
         const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
 
         // When projectile touches enemy
@@ -162,21 +176,17 @@ if (c) {
             gsap.to(enemy, {
               radius: enemy.radius - 10,
             });
-            setTimeout(() => {
-              projectiles.splice(projectileId, 1);
-            }, 0);
+            projectiles.splice(projectileId, 1);
           } else {
             // Remove from scene altogether
             score += 250;
             scoreEl.textContent = String(score);
             // Till the very next frame to start remove the detected objects from the arrays, to avoid flickering
-            setTimeout(() => {
-              enemies.splice(enemyId, 1);
-              projectiles.splice(projectileId, 1);
-            }, 0);
+            enemies.splice(enemyId, 1);
+            projectiles.splice(projectileId, 1);
           }
         }
-      });
+      }
 
       // Collision detection between enemy and player
       const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
@@ -185,6 +195,6 @@ if (c) {
       if (dist - player.radius - enemy.radius < 1) {
         gameOver();
       }
-    });
+    }
   }
 }
