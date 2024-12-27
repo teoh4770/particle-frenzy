@@ -2,7 +2,13 @@ import gsap from "gsap";
 import "./style.css";
 import { Enemy, Particle, Player, Projectile } from "./classes";
 import { handleWindowClick } from "./eventListeners";
-import { scoreEl, bigScoreEl, modelEl, startGameBtn } from "./elements";
+import {
+  scoreEl,
+  bigScoreEl,
+  modelEl,
+  startGameBtn,
+  modelTitle,
+} from "./elements";
 
 const canvas = document.querySelector("canvas") as HTMLCanvasElement;
 canvas.width = innerWidth;
@@ -88,6 +94,7 @@ if (c) {
 
     // Show and update the game over model
     modelEl.style.display = "flex";
+    modelTitle.textContent = "Game Over";
     bigScoreEl.textContent = String(score);
     startGameBtn.textContent = "Restart";
   }
@@ -121,7 +128,7 @@ if (c) {
       projectileId--
     ) {
       const projectile = projectiles[projectileId];
-      
+
       projectile.update();
 
       // Remove from edges of screen
