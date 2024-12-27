@@ -25,6 +25,8 @@ if (c) {
   let projectiles: Projectile[] = [];
   let enemies: Enemy[] = [];
   let particles: Particle[] = [];
+  let animationId: number;
+  let enemiesAnimationId: number;
   let score: number;
 
   /***********************/
@@ -52,13 +54,15 @@ if (c) {
     projectiles = [];
     enemies = [];
     particles = [];
+    animationId = -1;
+    enemiesAnimationId = -1;
     score = 0;
     scoreEl.textContent = String(0);
     bigScoreEl.textContent = String(0);
   }
 
   function spawnEnemies() {
-    requestAnimationFrame(spawnEnemies);
+    enemiesAnimationId = requestAnimationFrame(spawnEnemies);
     frame++;
 
     if (frame % 60 === 0) {
@@ -91,6 +95,7 @@ if (c) {
   function gameOver() {
     // Stop animation
     cancelAnimationFrame(animationId);
+    cancelAnimationFrame(enemiesAnimationId);
 
     // Show and update the game over model
     modelEl.style.display = "flex";
@@ -101,7 +106,6 @@ if (c) {
 
   // Animation loop: Allow us to call a callback continously
   // e.g. We can continously call 'animate' function itself
-  let animationId: number;
   function animate() {
     animationId = requestAnimationFrame(animate);
 
