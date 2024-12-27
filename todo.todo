@@ -13,6 +13,13 @@ Basic Game Checklist:
 - [X] Add start game button
 - [X] Add game over UI
 - [X] Add restart button
+- [X] More accurate object removal (when using splice, loop from the back of the array)
+  - When we remove an object from an array using splice, the items after removed object will shift one place forward
+  - If we iterate from the beginning to the end, we might skip the particle next to the removed object.
+  - But if we iterate from the end to the beginning, this problem can be solved. 
 - [ ] Add background music
 - [ ] Add sound effects
+  - [ ] When player shoots the particle
+  - [ ] When enemy gets hit by the particle
+  - [ ] When enemy dies
 - [ ] Resize event
