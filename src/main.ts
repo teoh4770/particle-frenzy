@@ -43,14 +43,30 @@ if (c) {
     init();
     animate();
     spawnEnemies();
-    startGameModelEl.style.display = "none";
+    gsap.to(startGameModelEl, {
+      opacity: 0,
+      scale: 0.8,
+      duration: 0.3,
+      ease: "expo.in",
+      onComplete: () => {
+        startGameModelEl.style.display = "none";
+      },
+    });
   });
 
   restartBtn.addEventListener("click", () => {
     init();
     animate();
     spawnEnemies();
-    restartGameModelEl.style.display = "none";
+    gsap.to(startGameModelEl, {
+      opacity: 0,
+      scale: 0.8,
+      duration: 0.3,
+      ease: "expo.in",
+      onComplete: () => {
+        restartGameModelEl.style.display = "none";
+      },
+    });
   });
 
   /***********************/
@@ -107,6 +123,18 @@ if (c) {
 
     // Show and update the game over model
     restartGameModelEl.style.display = "flex";
+    gsap.fromTo(
+      restartGameModelEl,
+      {
+        scale: 0.8,
+        opacity: 0,
+      },
+      {
+        scale: 1,
+        opacity: 1,
+        ease: "expo",
+      },
+    );
     bigScoreEl.textContent = String(score);
   }
 
