@@ -3,11 +3,12 @@ import "./style.css";
 import { Enemy, Particle, Player, Projectile } from "./classes";
 import { handleWindowClick } from "./eventListeners";
 import {
+  startGameModelEl,
+  startGameBtn,
   scoreEl,
   bigScoreEl,
-  modelEl,
-  startGameBtn,
-  modelTitle,
+  restartGameModelEl,
+  restartBtn,
 } from "./elements";
 
 const canvas = document.querySelector("canvas") as HTMLCanvasElement;
@@ -42,7 +43,14 @@ if (c) {
     init();
     animate();
     spawnEnemies();
-    modelEl.style.display = "none";
+    startGameModelEl.style.display = "none";
+  });
+
+  restartBtn.addEventListener("click", () => {
+    init();
+    animate();
+    spawnEnemies();
+    restartGameModelEl.style.display = "none";
   });
 
   /***********************/
@@ -98,10 +106,8 @@ if (c) {
     cancelAnimationFrame(enemiesAnimationId);
 
     // Show and update the game over model
-    modelEl.style.display = "flex";
-    modelTitle.textContent = "Game Over";
+    restartGameModelEl.style.display = "flex";
     bigScoreEl.textContent = String(score);
-    startGameBtn.textContent = "Restart";
   }
 
   // Animation loop: Allow us to call a callback continously
